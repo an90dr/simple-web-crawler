@@ -1,0 +1,3 @@
+DB_CONNECTION_STRING = "mongodb://localhost:27017/"
+DB_COLLECTION_EMAIL_NAME = "emails"
+DB_COLLECTION_URL_NAME = "urls"
