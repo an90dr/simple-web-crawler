@@ -1,3 +1,7 @@
 DB_CONNECTION_STRING = "mongodb://localhost:27017/"
 DB_COLLECTION_EMAIL_NAME = "emails"
 DB_COLLECTION_URL_NAME = "urls"
+DB_COLLECTION_PAGE_URL_NAME = "page_urls"
+
+MODE_TYPE_URL = 'url'
+MODE_TYPE_PARSE_PAGE_URLS = 'page_url'

@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from constants import DB_COLLECTION_URL_NAME, DB_COLLECTION_EMAIL_NAME, DB_CONNECTION_STRING
+from constants import DB_COLLECTION_PAGE_URL_NAME, DB_COLLECTION_URL_NAME, DB_COLLECTION_EMAIL_NAME, DB_CONNECTION_STRING
 
 def get_database():
  
@@ -25,6 +25,16 @@ def insertURL(document):
 
     dbname = get_database()
     collection_name = dbname[DB_COLLECTION_URL_NAME]
+    
+    if collection_name.count_documents(document) == 0 :
+        collection_name.insert_one(document)
+        return 1;
+    return 0; 
+
+def insertPageURL(document):
+
+    dbname = get_database()
+    collection_name = dbname[DB_COLLECTION_PAGE_URL_NAME]
     
     if collection_name.count_documents(document) == 0 :
         collection_name.insert_one(document)
