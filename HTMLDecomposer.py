@@ -16,3 +16,9 @@ class HTMLDecomposer:
         parsed_html = soup(htmlText, features="html.parser")
         anchorList = parsed_html.body.select('.Search_Bar_Number .Search_Bar_a1');
         return anchorList
+
+    def isCategoryURL(url):
+        htmlText = requests.get(url).text
+        parsed_html = soup(htmlText, features="html.parser")
+        anchorList = parsed_html.body.select('.categories');
+        return len(anchorList) > 0

@@ -41,3 +41,25 @@ def insertPageURL(document):
         return 1;
     return 0; 
 
+
+def getSourceURLs():
+    dbname = get_database()
+    collection_name = dbname[DB_COLLECTION_URL_NAME]
+
+    return collection_name.find()
+
+
+def updateURLType(urlObject):
+    dbname = get_database()
+    collection_name = dbname[DB_COLLECTION_URL_NAME]
+
+    collection_name.update_one({
+        '_id': urlObject['_id']
+        },
+        {"$set":{"type": "CATEGORY"}}, 
+    upsert=False)
+
+
+    return;
+
+
