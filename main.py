@@ -1,8 +1,8 @@
 import sys;
 from HTMLDecomposer import HTMLDecomposer
-from constants import MODE_TYPE_MASS_PAGE_URL_PARSING, MODE_TYPE_PARSE_PAGE_URLS, MODE_TYPE_UPDATE_URL_TYPE, MODE_TYPE_URL, SOURCE_WEBSITE_HOST
-from db import getSourceURLs, insertPageURL, insertURL, updateURLType;
-
+from constants import MODE_TYPE_COLLECT_EMAILS, MODE_TYPE_MASS_PAGE_URL_PARSING, MODE_TYPE_PARSE_PAGE_URLS, MODE_TYPE_UPDATE_URL_TYPE, MODE_TYPE_URL, SOURCE_WEBSITE_HOST
+from db import getPageURLs, getSourceURLs, insertPageURL, insertURL, updateURLType;
+from bs4 import BeautifulSoup as soup
    
 def url_parse():
     anchorTagList = HTMLDecomposer.getAnchorTags(sys.argv[2])
@@ -27,7 +27,7 @@ def url_parse_page_url():
 def mass_url_parse():
     sourceURLsList = getSourceURLs()
 
-    sourceURLsList = sourceURLsList.limit(100)
+    sourceURLsList = sourceURLsList
 
     for parsedURL in sourceURLsList:
         #find pages
@@ -52,6 +52,29 @@ def update_url_type():
     
     return
 
+def collect_emails():
+    pageURLsList = getPageURLs()
+    pageURLs = pageURLsList.limit(2)
+
+    for pageURL in pageURLs:
+        parsed_html = HTMLDecomposer.parseHTML(SOURCE_WEBSITE_HOST + pageURL['url'])
+
+        companyContainerList = HTMLDecomposer.getCompanyContainers(parsed_html)
+
+        for companyContainer in companyContainerList:
+            
+            companyTitle = HTMLDecomposer.getCompanyTitle(companyContainer);
+            print(companyTitle)
+            
+            email = HTMLDecomposer.getEmailElements(companyContainer);
+            print(email)
+        
+        #emailTagList = HTMLDecgetEmailElementsomposer.(parsed_html)
+
+        #for emailTag in emailTagList:
+            #print(emailTag.getText())
+
+
 if(len( sys.argv ) <= 1):
     print("Wrong Parameters")
     exit();
@@ -67,3 +90,5 @@ elif (  sys.argv[1] == MODE_TYPE_MASS_PAGE_URL_PARSING ) :
     mass_url_parse();
 elif (  sys.argv[1] == MODE_TYPE_UPDATE_URL_TYPE ) :
     update_url_type();
+elif (  sys.argv[1] == MODE_TYPE_COLLECT_EMAILS ) :
+    collect_emails();

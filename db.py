@@ -48,6 +48,11 @@ def getSourceURLs():
 
     return collection_name.find()
 
+def getPageURLs():
+    dbname = get_database()
+    collection_name = dbname[DB_COLLECTION_PAGE_URL_NAME]
+
+    return collection_name.find()
 
 def updateURLType(urlObject):
     dbname = get_database()
