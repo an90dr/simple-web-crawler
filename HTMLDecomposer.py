@@ -33,11 +33,22 @@ class HTMLDecomposer:
         companyElement = parsed_element.select('.biz_info_title');
 
         if(len(companyElement) == 0):
-            return ''
+            return '<NoCompanyTitleFound/>'
         
         return companyElement[0].getText();
 
-    def getEmailElements(parsed_element):
+    def getEmail(parsed_element):
         emailList = parsed_element.select('.biz_info_email>a');
-        
-        return emailList
+
+        if(len(emailList) == 0):
+            return '<NoEmailFound/>'
+
+        return emailList[0].getText();
+
+    def getWebsite(parsed_element):
+        websiteList = parsed_element.select('.biz_info_description > u > a');
+
+        if(len(websiteList) == 0):
+            return '<NoWebsiteFound/>'
+
+        return websiteList[0].getText();

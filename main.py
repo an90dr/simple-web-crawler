@@ -54,7 +54,7 @@ def update_url_type():
 
 def collect_emails():
     pageURLsList = getPageURLs()
-    pageURLs = pageURLsList.limit(2)
+    pageURLs = pageURLsList.limit(1)
 
     for pageURL in pageURLs:
         parsed_html = HTMLDecomposer.parseHTML(SOURCE_WEBSITE_HOST + pageURL['url'])
@@ -66,13 +66,11 @@ def collect_emails():
             companyTitle = HTMLDecomposer.getCompanyTitle(companyContainer);
             print(companyTitle)
             
-            email = HTMLDecomposer.getEmailElements(companyContainer);
+            email = HTMLDecomposer.getEmail(companyContainer);
             print(email)
         
-        #emailTagList = HTMLDecgetEmailElementsomposer.(parsed_html)
-
-        #for emailTag in emailTagList:
-            #print(emailTag.getText())
+            website = HTMLDecomposer.getWebsite(companyContainer);
+            print(website)
 
 
 if(len( sys.argv ) <= 1):
