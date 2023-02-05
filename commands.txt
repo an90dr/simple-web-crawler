@@ -1,0 +1,7 @@
+py ./main.py -url http://google.com -selector .biz_info_description>u>a -export C:/test.txt
+
+py ./main.py -url http://google.com -selectors .biz_info_description>u>a -export C:/test.txt
+
+py ./main.py -url http://google.com -r -selector .biz_info_description>u>a -export C:/test.txt
+
+py ./main.py -url http://google.com -r -selectors .biz_info_description>u>a -export C:/test.txt

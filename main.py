@@ -57,21 +57,22 @@ def collect_emails():
     pageURLs = pageURLsList.limit(1)
 
     for pageURL in pageURLs:
-        parsed_html = HTMLDecomposer.parseHTML(SOURCE_WEBSITE_HOST + pageURL['url'])
+        sourceURL = SOURCE_WEBSITE_HOST + pageURL['url'];
+        parsed_html = HTMLDecomposer.parseHTML(sourceURL)
 
         companyContainerList = HTMLDecomposer.getCompanyContainers(parsed_html)
 
         for companyContainer in companyContainerList:
             
-            companyTitle = HTMLDecomposer.getCompanyTitle(companyContainer);
-            print(companyTitle)
-            
+            companyName = HTMLDecomposer.getCompanyTitle(companyContainer);
             email = HTMLDecomposer.getEmail(companyContainer);
-            print(email)
-        
             website = HTMLDecomposer.getWebsite(companyContainer);
+            telephone = HTMLDecomposer.getPhone(companyContainer);
+            
+            print(companyName)
             print(website)
-
+            print(email)
+            print(telephone)
 
 if(len( sys.argv ) <= 1):
     print("Wrong Parameters")

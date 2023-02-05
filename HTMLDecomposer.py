@@ -52,3 +52,11 @@ class HTMLDecomposer:
             return '<NoWebsiteFound/>'
 
         return websiteList[0].getText();
+
+    def getPhone(parsed_element):
+        phoneList = parsed_element.select('.biz_info_phone');
+
+        if(len(phoneList) == 0):
+            return '<NoPhoneFound/>'
+
+        return phoneList[0].getText();
