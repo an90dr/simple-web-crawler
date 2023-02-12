@@ -1,71 +1,63 @@
 import argparse
-import collections.abc
-import bs4
+from FileProcessing.File import File
 
-from HTMLDecomposer import HTMLDecomposer
+from DataManipulator.DataManipulator import DataManipulator
+from Numbers.Numbers import Numbers
+from constants import NON_SECURE_PROTOCOL, SECURE_PROTOCOL
+from personal.HTMLDecomposer import HTMLDecomposer
 
-anchorList = [];
-processedAnchorTagList = [];
-
-def getAnchorTags(url):
-    parsed_html = HTMLDecomposer.parseHTML(url)
-    anchorList = parsed_html.body.select('a');
-    return anchorList
-
-def appendElementToList(urls, list):
-    if type(urls) is bs4.ResultSet:
-        for url in urls:
-            if url not in list :
-                if (args.domain in url['href'] or 
-                    'http://' in url['href'] or 
-                    'https://' in url['href']):
-                    list.append(url['href']) 
-                else: 
-                    list.append(args.domain + url['href']);
-    else:
-        if urls not in list :
-            list.append(urls);
-
+anchorSet = set()
+processedAnchorTagSet = set()
+iterationList = []
 
 parser = argparse.ArgumentParser(
-                    prog = 'Crawler',
-                    description = 'Crawl through a given url and export html elements',
-                    epilog = 'Thank you')
+    prog='Crawler',
+    description='Crawl through a given url and export html elements',
+    epilog='Thank you')
 
 
 parser.add_argument('-u', '--url')      # option that takes a value
 parser.add_argument('-s', '--selector')
 parser.add_argument('-e', '--export')
 parser.add_argument('-d', '--domain')
+parser.add_argument('-duo', '--domain_urls_only',
+                    action='store_true')
 parser.add_argument('-r', '--recursive',
                     action='store_true')
 
 args = parser.parse_args()
 parsed_html = HTMLDecomposer.parseHTML(args.url)
-htmlElements = parsed_html.body.select(args.selector);
+htmlElements = parsed_html.body.select(args.selector)
 
-if(args.recursive):
-    
-    #add args.url list to processed list
-    appendElementToList(args.url, processedAnchorTagList);
-    
-    #get first url anchor list
-    firstPageAnchorList = parsed_html.body.select('a');
-    appendElementToList(firstPageAnchorList, anchorList);
-    
-    for anchor in anchorList:
+
+if (args.recursive):
+
+    # add args.url list to processed list
+    DataManipulator.addElementToSet(args.url, processedAnchorTagSet)
+
+    # get first url anchor list
+    firstPageAnchorList = DataManipulator.elementsToHrefSet(args,parsed_html.body.select('a'))
+    anchorSet = set(firstPageAnchorList)
+    DataManipulator.addSetToIterationList(anchorSet, iterationList)
+
+    for anchor in iterationList:
         parsed_html = HTMLDecomposer.parseHTML(anchor)
-        htmlElements = parsed_html.body.select('a');
-        appendElementToList(firstPageAnchorList, anchorList);
-        appendElementToList(anchor, processedAnchorTagList);
-        print(str(len(processedAnchorTagList)) + " / " + str(len(anchorList)));
+        if (parsed_html is not None and
+                parsed_html.body is not None):
 
-file1 = open(args.export, 'w')
+            hrefElements = DataManipulator.elementsToHrefSet(args, parsed_html.body.select('a'))
+            DataManipulator.addElementToSet(hrefElements, anchorSet)
+            DataManipulator.addSetToIterationList(anchorSet, iterationList)
 
-for element in htmlElements:
-    file1.write(str(element) + '\n')
+            DataManipulator.addElementToSet(anchor, processedAnchorTagSet)
 
-file1.close()
+            progress = Numbers.resolveProgress(len(processedAnchorTagSet), len(anchorSet))
+            print(progress)
+            File.appendContents(args.export, anchor)
 
+else:
 
-
+    for element in htmlElements:
+        if element.has_key('href'):
+            url = DataManipulator.resolveURL(args, element['href'])
+            File.appendContents(args.export, url)

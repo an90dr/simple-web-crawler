@@ -1,14 +1,3 @@
-DB_CONNECTION_STRING = "mongodb://localhost:27017/"
-DB_COLLECTION_EMAIL_NAME = "emails"
-DB_COLLECTION_URL_NAME = "urls"
-DB_COLLECTION_PAGE_URL_NAME = "page_urls"
-
-MODE_TYPE_URL = 'url'
-MODE_TYPE_PARSE_PAGE_URLS = 'page_url'
-MODE_TYPE_MASS_PAGE_URL_PARSING = 'mass_url_export'
-MODE_TYPE_UPDATE_URL_TYPE = 'update_url_type'
-MODE_TYPE_COLLECT_EMAILS = 'collect_email'
-
-URL_TYPE_CATEGORY = 'CATEGORY'
-
-SOURCE_WEBSITE_HOST = 'https://www.oncyprus.com'
+SECURE_PROTOCOL = 'https://';
+NON_SECURE_PROTOCOL = 'http://';
+IGNORE_HREF_CONTENTS = set('mailto:');
